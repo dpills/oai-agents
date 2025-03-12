@@ -1,13 +1,28 @@
-# Python-generated files
-__pycache__/
-*.py[oc]
-build/
-dist/
-wheels/
-*.egg-info
+# Testing
+coverage*
+.coverage
+.pytest_cache
+.scannerwork
+htmlcov
+test-report.xml
+pytest-report.xml
 
-# Virtual environments
+# Production
+dist
+
+# Virtual Environment
 .venv
 
 # Environment Variables
 .env
+.env.*
+
+# Caches
+__pycache__
+.DS_Store
+.mypy_cache
+.ruff_cache
+
+# Editors
+.vscode/settings.json
+.idea
