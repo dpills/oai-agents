@@ -1,6 +1,12 @@
 import asyncio
 
-from agents import Runner, set_default_openai_client, trace
+from agents import (
+    Runner,
+    set_default_openai_api,
+    set_default_openai_client,
+    set_tracing_disabled,
+    trace,
+)
 from openai.types.chat import (
     ChatCompletionAssistantMessageParam,
     ChatCompletionUserMessageParam,
@@ -11,7 +17,9 @@ from openai.types.responses.response_input_item_param import FunctionCallOutput
 from .agents import supervisor_agent
 from .clients import openai_client
 
-set_default_openai_client(openai_client)
+set_default_openai_client(client=openai_client)
+set_tracing_disabled(True)
+set_default_openai_api("chat_completions")
 
 
 async def main() -> None:
