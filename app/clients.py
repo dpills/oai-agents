@@ -13,4 +13,5 @@ openai_client = AsyncAzureOpenAI(
     api_key=config.openai_key.get_secret_value(),
     api_version=config.azure_api_version,
     azure_endpoint=config.openai_base_url,
+    timeout=30,
 )
