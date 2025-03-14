@@ -6,8 +6,8 @@ readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [
     "motor>=3.7.0",
-    "openai>=1.66.2",
-    "openai-agents>=0.0.3",
+    "openai>=1.66.3",
+    "openai-agents>=0.0.4",
     "pydantic-settings>=2.8.1",
 ]
 
