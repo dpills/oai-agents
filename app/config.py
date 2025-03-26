@@ -9,8 +9,9 @@ class Config(BaseSettings):
 
     # OpenAI
     openai_key: SecretStr
-    openai_base_url: str
+    openai_base_url: str | None = None  # Provide base url to use Azure client
     azure_api_version: str = "2025-02-01-preview"
+    client_timeout: int = 30
 
     model_config = SettingsConfigDict(env_file=".env", extra="ignore")
 
