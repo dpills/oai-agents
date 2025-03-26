@@ -19,10 +19,14 @@ from openai.types.responses import (
 
 from .agents import supervisor_agent
 from .clients import openai_client
+from .config import config
 
 set_default_openai_client(client=openai_client)
-set_tracing_disabled(True)
-set_default_openai_api("chat_completions")
+
+# Azure config
+if config.openai_base_url:
+    set_tracing_disabled(True)
+    set_default_openai_api("chat_completions")
 
 
 async def main() -> None:
