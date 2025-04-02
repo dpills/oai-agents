@@ -4,6 +4,7 @@ from typing import Any
 import orjson
 from agents import (
     Runner,
+    enable_verbose_stdout_logging,
     set_default_openai_client,
     set_tracing_disabled,
     trace,
@@ -19,8 +20,14 @@ from openai.types.responses import (
 from .agents import supervisor_agent
 from .clients import openai_client
 from .config import config
+from .log import log
 
 set_default_openai_client(client=openai_client)
+
+
+if config.openai_verbose_logging:
+    log.info("Verbose Logging Enabled")
+    enable_verbose_stdout_logging()  # type: ignore
 
 # Azure config
 if config.openai_base_url:
