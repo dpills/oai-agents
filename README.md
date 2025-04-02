@@ -10,6 +10,8 @@ OPENAI_KEY=sk-proj-XXXXXX
 MONGO_URI=mongodb://root:oaiAgents123@localhost:27020/
 ````
 
+_Include `OPENAI_BASE_URL` in the `.env` to use an Azure instance_
+
 Start the local MongoDB container.
 
 ```bash
