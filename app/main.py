@@ -4,7 +4,6 @@ from typing import Any
 import orjson
 from agents import (
     Runner,
-    set_default_openai_api,
     set_default_openai_client,
     set_tracing_disabled,
     trace,
@@ -26,7 +25,6 @@ set_default_openai_client(client=openai_client)
 # Azure config
 if config.openai_base_url:
     set_tracing_disabled(True)
-    set_default_openai_api("chat_completions")
 
 
 async def main() -> None:
