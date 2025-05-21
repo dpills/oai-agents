@@ -13,7 +13,6 @@ from openai.types.responses import (
     EasyInputMessageParam,
     ResponseFunctionToolCall,
     ResponseInputItemParam,
-    ResponseOutputItemAddedEvent,
     ResponseTextDeltaEvent,
 )
 
@@ -61,45 +60,36 @@ async def main() -> None:
                     event.data, ResponseTextDeltaEvent
                 ):
                     print(event.data.delta, end="", flush=True)
-                elif (
-                    event.type == "raw_response_event"
-                    and isinstance(event.data, ResponseOutputItemAddedEvent)
-                    and isinstance(event.data.item, ResponseFunctionToolCall)
-                    and not event.data.item.name.startswith("transfer_to_")
-                ):
-                    print(f"TOOL CALL: {event.data.item.name}")
-                elif (
-                    event.type == "run_item_stream_event"
-                    and event.name == "tool_called"
-                ):
-                    args = None
-                    if event.item.raw_item.arguments:
+
+                elif event.type == "agent_updated_stream_event":
+                    print(f"Agent updated: {event.new_agent.name}")
+
+                elif event.type == "run_item_stream_event":
+                    if event.item.type == "tool_call_item" and isinstance(
+                        event.item.raw_item, ResponseFunctionToolCall
+                    ):
+                        call_id = event.item.raw_item.call_id
+                        name = event.item.raw_item.name
                         args = orjson.loads(event.item.raw_item.arguments)
 
-                    tool_calls[event.item.raw_item.call_id] = {
-                        "name": event.item.raw_item.name,
-                        "arguments": args,
-                    }
-                elif (
-                    event.type == "run_item_stream_event"
-                    and event.name == "tool_output"
-                ):
-                    call_id = event.item.raw_item["call_id"]
-                    if call_id and isinstance(call_id, str):
-                        tool_call = tool_calls.get(call_id)
-                        if tool_call:
-                            if tool_call["arguments"]:
-                                print(
-                                    f"TOOL: {tool_call['name']} - {tool_call['arguments']} \n\n {event.item.raw_item['output']}"  # noqa: E501
-                                )
-                            else:
-                                print(
-                                    f"TOOL: {tool_call['name']} \n\n {event.item.raw_item['output']}"  # noqa: E501
-                                )
-                        else:
-                            print(f"TOOL: {event.item.raw_item['output']}")
+                        tool_calls[event.item.raw_item.call_id] = {
+                            "name": name,
+                            "arguments": args,
+                        }
 
-            print()
+                        print(f"TOOL - {name} ({call_id}): {args}")
+                    elif event.item.type == "tool_call_output_item":
+                        if result_call_id := event.item.raw_item.get("call_id"):
+                            tool_call = tool_calls.get(result_call_id)
+                            if tool_call:
+                                if tool_call["arguments"]:
+                                    print(
+                                        f"TOOL: {tool_call['name']} - {tool_call['arguments']} \n\n {event.item.output}"  # noqa: E501
+                                    )
+                                else:
+                                    print(
+                                        f"TOOL: {tool_call['name']} \n\n {event.item.output}"  # noqa: E501
+                                    )
 
             convo_msgs = result.to_input_list()
 
