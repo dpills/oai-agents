@@ -2,6 +2,7 @@ from datetime import datetime
 from typing import Optional
 
 import bson
+import yaml
 from agents import function_tool
 
 from app.clients import db
@@ -10,7 +11,7 @@ from .models import Todo
 
 
 @function_tool
-async def get_todos() -> list[Todo]:
+async def get_todos() -> str:
     """
     Get todos
     """
@@ -25,7 +26,10 @@ async def get_todos() -> list[Todo]:
             )
         )
 
-    return todos
+    if todos:
+        return yaml.dump([t.model_dump() for t in todos], indent=2)
+
+    return "No todos found"
 
 
 @function_tool
