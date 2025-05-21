@@ -1,7 +1,7 @@
 from agents import Agent
 
 history_agent = Agent(
-    model="gpt-4o",
+    model="gpt-4.1",
     name="History Tutor",
     handoff_description="Specialist agent for historical questions",
     instructions=(

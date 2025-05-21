@@ -12,7 +12,7 @@ Current Date: {datetime.now().isoformat()}
 """
 
 supervisor_agent = Agent(
-    model="gpt-4o",
+    model="gpt-4.1",
     name="Supervisor Agent",
     instructions=instructions,
     handoffs=[history_agent, todo_agent],
